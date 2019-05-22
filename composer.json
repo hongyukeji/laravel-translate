@@ -42,7 +42,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Hongyukeji\\LaravelTranslate\\TranslationServiceProvider"
+                "Hongyukeji\\LaravelTranslate\\TranslateServiceProvider"
             ],
             "aliases": {
                 "Translate": "Hongyukeji\\LaravelTranslate\\TranslateFacade"
