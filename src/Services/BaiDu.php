@@ -78,7 +78,6 @@ class BaiDu implements TranslationService
         if (isset($result['trans_result'][0]['dst'])) {
             return $result['trans_result'][0]['dst'];
         } else {
-            // TODO: 如果百度翻译没有结果，使用有道翻译作为后备计划。
             return $text;
         }
     }

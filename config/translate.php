@@ -33,7 +33,8 @@ return [
             'key'   => env('BAIDU_TRANSLATE_API_KEY')
         ],
         'youdao' => [
-            'key' => env('YOUDAO_TRANSLATE_API_APPKEY'),
+            'appid' => env('YOUDAO_TRANSLATE_API_APPID'),
+            'key'   => env('YOUDAO_TRANSLATE_API_KEY')
         ]
     ],
 
