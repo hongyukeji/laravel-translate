@@ -46,9 +46,9 @@ class YouDaoTranslator implements TranslatorInterface
      */
     public function translate(string $string): string
     {
-        $ret = $this->do_request($string, $this->target);
-        $ret = json_decode($ret, true);
-        return isset($ret['translation'][0]) ? $ret['translation'][0] : '';
+        $result = $this->do_request($string, $this->target);
+        $result = json_decode($result, true);
+        return isset($result['translation'][0]) ? $result['translation'][0] : '';
     }
 
 

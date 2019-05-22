@@ -2,7 +2,6 @@
 
 namespace Hongyukeji\LaravelTranslate\Translators;
 
-use GuzzleHttp\Client;
 use Hongyukeji\LaravelTranslate\Exceptions\LanguageCodeNotExist;
 
 class BaiDuTranslator implements TranslatorInterface
@@ -47,22 +46,24 @@ class BaiDuTranslator implements TranslatorInterface
      */
     public function translate(string $string): string
     {
+        $result = $this->do_request($string, 'auto', $this->target);
+        $result = json_decode($result, true);
+        return isset($result['trans_result'][0]['dst']) ? $result['trans_result'][0]['dst'] : '';
+    }
+
+    function do_request($query, $from, $to)
+    {
         $args = array(
-            'q'     => $string,
+            'q'     => $query,
             'appid' => $this->appid,
             'salt'  => rand(10000, 99999),
-            'from'  => "auto",
-            'to'    => $this->target,
-
+            'from'  => $from,
+            'to'    => $to,
         );
-        $args['sign'] = buildSign($string, $this->appid, $args['salt'], $this->key);
-        $result = call(self::URL, $args);
-        $result = json_decode($ret, true);
-        if (isset($result['trans_result'][0]['dst'])) {
-            return $result['trans_result'][0]['dst'];
-        } else {
-            return '';
-        }
+        $args['sign'] = $this->buildSign($query, APP_ID, $args['salt'], SEC_KEY);
+        $ret = $this->call(URL, $args);
+        $ret = json_decode($ret, true);
+        return $ret;
     }
 
     //加密
@@ -84,7 +85,7 @@ class BaiDuTranslator implements TranslatorInterface
             if ($i > 0) {
                 sleep(1);
             }
-            $ret = callOnce($url, $args, $method, false, $timeout, $headers);
+            $ret = $this->callOnce($url, $args, $method, false, $timeout, $headers);
             $i++;
         }
         return $ret;
@@ -94,11 +95,11 @@ class BaiDuTranslator implements TranslatorInterface
     {/*{{{*/
         $ch = curl_init();
         if ($method == "post") {
-            $data = convert($args);
+            $data = $this->convert($args);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
             curl_setopt($ch, CURLOPT_POST, 1);
         } else {
-            $data = convert($args);
+            $data = $this->convert($args);
             if ($data) {
                 if (stripos($url, "?") > 0) {
                     $url .= "&$data";
