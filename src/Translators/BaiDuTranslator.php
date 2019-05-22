@@ -56,8 +56,8 @@ class BaiDuTranslator implements TranslatorInterface
         // 构建请求参数
         $query = http_build_query([
             "q"     => $text,
-            "from"  => "zh",
-            "to"    => "en",
+            "from"  => "auto",
+            "to"    => $this->target,
             "appid" => $appid,
             "salt"  => $salt,
             "sign"  => $sign,
