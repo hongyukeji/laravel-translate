@@ -7,12 +7,20 @@ use Hongyukeji\LaravelTranslate\Exceptions\LanguageCodeNotExist;
 
 class BaiDuTranslator implements TranslatorInterface
 {
+    const CURL_TIMEOUT = 10;
+    const URL = 'http://api.fanyi.baidu.com/api/trans/vip/translate';
+    public $appid;
+    public $key;
     protected $translator;
     protected $source;
     protected $target;
 
     public function __construct()
     {
+        $appid = config('translate.services.baidu.appid');
+        $key = config('translate.services.baidu.key');
+        $this->appid = $appid;
+        $this->key = $key;
     }
 
     public function setSource(string $source)
@@ -39,55 +47,95 @@ class BaiDuTranslator implements TranslatorInterface
      */
     public function translate(string $string): string
     {
-        $text = $string;
-        // 实例化 HTTP 客户端
-        $http = new Client;
-        // 初始化配置信息
-        $api = 'http://api.fanyi.baidu.com/api/trans/vip/translate?';
-        $appid = config('translate.services.baidu.appid');
-        $key = config('translate.services.baidu.key');
-        $salt = time();
+        $args = array(
+            'q'     => $string,
+            'appid' => $this->appid,
+            'salt'  => rand(10000, 99999),
+            'from'  => "auto",
+            'to'    => $this->target,
 
-        // 根据文档，生成 sign
-        // http://api.fanyi.baidu.com/api/trans/product/apidoc
-        // appid+q+salt+密钥 的MD5值
-        $sign = md5($appid . $text . $salt . $key);
-
-        // 构建请求参数
-        $query = http_build_query([
-            "q"     => $text,
-            "from"  => "auto",
-            "to"    => $this->target,
-            "appid" => $appid,
-            "salt"  => $salt,
-            "sign"  => $sign,
-        ]);
-
-        // 发送 HTTP Get 请求
-        $response = $http->get($api . $query);
-
-        $result = json_decode($response->getBody(), true);
-
-        /**
-         * 获取结果，如果请求成功，dd($result) 结果如下：
-         *
-         * array:3 [▼
-         * "from" => "zh"
-         * "to" => "en"
-         * "trans_result" => array:1 [▼
-         * 0 => array:2 [▼
-         * "src" => "XSS 安全漏洞"
-         * "dst" => "XSS security vulnerability"
-         * ]
-         * ]
-         * ]
-         **/
-
-        // 尝试获取获取翻译结果
+        );
+        $args['sign'] = buildSign($string, $this->appid, $args['salt'], $this->key);
+        $result = call(self::URL, $args);
+        $result = json_decode($ret, true);
         if (isset($result['trans_result'][0]['dst'])) {
             return $result['trans_result'][0]['dst'];
         } else {
             return '';
         }
     }
+
+    //加密
+    function buildSign($query, $appID, $salt, $secKey)
+    {/*{{{*/
+        $str = $appID . $query . $salt . $secKey;
+        $ret = md5($str);
+        return $ret;
+    }/*}}}*/
+
+    //发起网络请求
+    function call($url, $args = null, $method = "post", $testflag = 0, $timeout = self::CURL_TIMEOUT, $headers = array())
+    {/*{{{*/
+        $ret = false;
+        $i = 0;
+        while ($ret === false) {
+            if ($i > 1)
+                break;
+            if ($i > 0) {
+                sleep(1);
+            }
+            $ret = callOnce($url, $args, $method, false, $timeout, $headers);
+            $i++;
+        }
+        return $ret;
+    }/*}}}*/
+
+    function callOnce($url, $args = null, $method = "post", $withCookie = false, $timeout = self::CURL_TIMEOUT, $headers = array())
+    {/*{{{*/
+        $ch = curl_init();
+        if ($method == "post") {
+            $data = convert($args);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_POST, 1);
+        } else {
+            $data = convert($args);
+            if ($data) {
+                if (stripos($url, "?") > 0) {
+                    $url .= "&$data";
+                } else {
+                    $url .= "?$data";
+                }
+            }
+        }
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        if (!empty($headers)) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        }
+        if ($withCookie) {
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $_COOKIE);
+        }
+        $r = curl_exec($ch);
+        curl_close($ch);
+        return $r;
+    }/*}}}*/
+
+    function convert(&$args)
+    {/*{{{*/
+        $data = '';
+        if (is_array($args)) {
+            foreach ($args as $key => $val) {
+                if (is_array($val)) {
+                    foreach ($val as $k => $v) {
+                        $data .= $key . '[' . $k . ']=' . rawurlencode($v) . '&';
+                    }
+                } else {
+                    $data .= "$key=" . rawurlencode($val) . "&";
+                }
+            }
+            return trim($data, "&");
+        }
+        return $args;
+    }/*}}}*/
 }
