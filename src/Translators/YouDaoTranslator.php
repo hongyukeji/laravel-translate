@@ -14,10 +14,10 @@ class YouDaoTranslator implements TranslatorInterface
 
     public function __construct()
     {
-        $appid = config('translate.services.youdao.appid');
-        $key = config('translate.services.youdao.key');
-        $this->appid = $appid;
-        $this->key = $key;
+        $this->appid = config('translate.services.youdao.appid');
+        $this->key = config('translate.services.youdao.key');
+        $this->source = config('translate.source_language');
+        $this->target = config('translate.target_language');
     }
 
     public function setSource(string $source)
