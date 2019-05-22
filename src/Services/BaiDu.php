@@ -15,6 +15,7 @@
 
 namespace Hongyukeji\LaravelTranslate\Services;
 
+use GuzzleHttp\Client;
 use Hongyukeji\LaravelTranslate\Contracts\TranslationService;
 
 class BaiDu implements TranslationService
@@ -82,13 +83,8 @@ class BaiDu implements TranslationService
         if (isset($result['trans_result'][0]['dst'])) {
             return str_slug($result['trans_result'][0]['dst']);
         } else {
-            // 如果百度翻译没有结果，使用拼音作为后备计划。
-            return $this->pinyin($text);
+            // TODO: 如果百度翻译没有结果，使用有道翻译作为后备计划。
+            return $text;
         }
-    }
-
-    public function pinyin($text)
-    {
-        return str_slug(app(Pinyin::class)->permalink($text));
     }
 }
