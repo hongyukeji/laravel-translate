@@ -2,8 +2,6 @@
 
 namespace Hongyukeji\LaravelTranslate\Translators;
 
-use Hongyukeji\LaravelTranslate\Exceptions\LanguageCodeNotExist;
-
 class YouDaoTranslator implements TranslatorInterface
 {
     const CURL_TIMEOUT = 2000;

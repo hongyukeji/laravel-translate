@@ -2,8 +2,6 @@
 
 namespace Hongyukeji\LaravelTranslate\Translators;
 
-use Hongyukeji\LaravelTranslate\Exceptions\LanguageCodeNotExist;
-
 class BaiDuTranslator implements TranslatorInterface
 {
     const CURL_TIMEOUT = 10;
