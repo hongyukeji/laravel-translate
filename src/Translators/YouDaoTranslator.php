@@ -20,7 +20,6 @@ class YouDaoTranslator implements TranslatorInterface
         $key = config('translate.services.youdao.key');
         $this->appid = $appid;
         $this->key = $key;
-        $this->translator = DeeplClient::create(config('translate.deepl.api_key'));
     }
 
     public function setSource(string $source)

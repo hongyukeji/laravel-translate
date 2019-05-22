@@ -36,7 +36,7 @@ class TranslateServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'translate');
+        $this->mergeConfigFrom(__DIR__.'/../config/translate.php', 'translate');
 
         $this->app->bind(TranslatorInterface::class, config('translate.translator'));
 
