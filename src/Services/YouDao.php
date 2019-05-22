@@ -45,7 +45,7 @@ class YouDao implements TranslationService
     {
         $ret = $this->do_request($text, $target);
         $ret = json_decode($ret, true);
-        return isset($ret['translation']) ?: $text;
+        return isset($ret['translation'][0]) ? $ret['translation'][0] : $text;
     }
 
     function do_request($q, $target)
