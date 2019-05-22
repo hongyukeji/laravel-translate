@@ -11,6 +11,8 @@
     "require": {
         "php": ">=7.1",
         "ext-json": "*",
+        "guzzlehttp/guzzle": "~6.3",
+        "overtrue/pinyin": "~3.0",
         "google/cloud-translate": "^1.2"
     },
     "require-dev": {
