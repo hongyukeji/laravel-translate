@@ -23,17 +23,17 @@ class MissingCommand extends Command
      */
     protected $description = 'Translates all source translations that are not set in your target translations';
 
-    protected $autoTranslator;
+    protected $translator;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(Translate $autoTranslator)
+    public function __construct(Translate $translator)
     {
         parent::__construct();
-        $this->autoTranslator = $autoTranslator;
+        $this->translator = $translator;
     }
 
     /**
@@ -43,14 +43,14 @@ class MissingCommand extends Command
      */
     public function handle()
     {
-        $targetLanguages = Arr::wrap(config('auto-translate.target_language'));
+        $targetLanguages = Arr::wrap(config('translate.target_language'));
 
         $foundLanguages = count($targetLanguages);
         $this->line('Found '.$foundLanguages.' '.Str::plural('language', $foundLanguages).' to translate');
 
         $missingCount = 0;
         foreach ($targetLanguages as $targetLanguage) {
-            $missing = $this->autoTranslator->getMissingTranslations($targetLanguage);
+            $missing = $this->translator->getMissingTranslations($targetLanguage);
             $missingCount += $missing->count();
             $this->line('Found '.$missing->count().' missing keys in '.$targetLanguage);
         }
@@ -59,13 +59,13 @@ class MissingCommand extends Command
         $bar->start();
 
         foreach ($targetLanguages as $targetLanguage) {
-            $missing = $this->autoTranslator->getMissingTranslations($targetLanguage);
+            $missing = $this->translator->getMissingTranslations($targetLanguage);
 
-            $translated = $this->autoTranslator->translate($targetLanguage, $missing, function () use ($bar) {
+            $translated = $this->translator->translate($targetLanguage, $missing, function () use ($bar) {
                 $bar->advance();
             });
 
-            $this->autoTranslator->fillLanguageFiles($targetLanguage, $translated);
+            $this->translator->fillLanguageFiles($targetLanguage, $translated);
         }
 
         $bar->finish();

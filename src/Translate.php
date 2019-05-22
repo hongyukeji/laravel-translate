@@ -15,12 +15,12 @@ class Translate
     {
         $this->manager = $manager;
         $this->translator = $translator;
-        $this->translator->setSource(config('auto-translate.source_language'));
+        $this->translator->setSource(config('translate.source_language'));
     }
 
     public function getSourceTranslations()
     {
-        return $this->getTranslations(config('auto-translate.source_language'));
+        return $this->getTranslations(config('translate.source_language'));
     }
 
     public function getTranslations(string $lang)

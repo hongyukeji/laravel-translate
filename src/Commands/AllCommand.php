@@ -23,17 +23,17 @@ class AllCommand extends Command
      */
     protected $description = 'Translates all source translations to target translations';
 
-    protected $autoTranslator;
+    protected $translator;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(Translate $autoTranslator)
+    public function __construct(Translate $translator)
     {
         parent::__construct();
-        $this->autoTranslator = $autoTranslator;
+        $this->translator = $translator;
     }
 
     /**
@@ -43,13 +43,13 @@ class AllCommand extends Command
      */
     public function handle()
     {
-        $targetLanguages = Arr::wrap(config('auto-translate.target_language'));
+        $targetLanguages = Arr::wrap(config('translate.target_language'));
 
         $foundLanguages = count($targetLanguages);
         $this->line('Found '.$foundLanguages.' '.Str::plural('language', $foundLanguages).' to translate');
 
         $availableTranslations = 0;
-        $sourceTranslations = $this->autoTranslator->getSourceTranslations();
+        $sourceTranslations = $this->translator->getSourceTranslations();
         $availableTranslations = count(Arr::dot($sourceTranslations)) * count($targetLanguages);
 
         $bar = $this->output->createProgressBar($availableTranslations);
@@ -58,11 +58,11 @@ class AllCommand extends Command
         foreach ($targetLanguages as $targetLanguage) {
             $dottedSource = Arr::dot($sourceTranslations);
 
-            $translated = $this->autoTranslator->translate($targetLanguage, $dottedSource, function () use ($bar) {
+            $translated = $this->translator->translate($targetLanguage, $dottedSource, function () use ($bar) {
                 $bar->advance();
             });
 
-            $this->autoTranslator->fillLanguageFiles($targetLanguage, $translated);
+            $this->translator->fillLanguageFiles($targetLanguage, $translated);
         }
 
         $bar->finish();

@@ -2,6 +2,43 @@
 
 return [
     /*
+    |--------------------------------------------------------------------------
+    | Translation Driver
+    |--------------------------------------------------------------------------
+    |
+    | This option controls which service you would like to use to obtain
+    | translations from. You may set this to one of the options below.
+    |
+    | Supported: "google"
+    |
+    */
+    'driver' => 'baidu',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Translation Service Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Here you can define all of the services which can be used for translation
+    | along with their associated settings. These settings will be passed
+    | to the translation service as per their own requirements.
+    |
+    */
+    'services' => [
+        'google' => [
+            'key' => env('GOOGLE_TRANSLATE_API_KEY')
+        ],
+        'baidu' => [
+            'appid' => env('BAIDU_TRANSLATE_API_APPID'),
+            'key'   => env('BAIDU_TRANSLATE_API_KEY')
+        ],
+        'youdao' => [
+            'appid' => env('YOUDAO_TRANSLATE_API_APPID'),
+            'key'   => env('YOUDAO_TRANSLATE_API_KEY')
+        ]
+    ],
+
+    /*
      * Here you can specify the source language code.
      */
     'source_language' => 'en',

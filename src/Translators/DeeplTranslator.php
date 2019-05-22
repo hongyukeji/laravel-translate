@@ -15,7 +15,7 @@ class DeeplTranslator implements TranslatorInterface
 
     public function __construct()
     {
-        $this->translator = DeeplClient::create(config('auto-translate.deepl.api_key'));
+        $this->translator = DeeplClient::create(config('translate.deepl.api_key'));
     }
 
     public function setSource(string $source)
