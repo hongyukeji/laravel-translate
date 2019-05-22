@@ -133,7 +133,7 @@ class YouDao implements TranslationService
         return $args;
     }
 
-// uuid generator
+    // uuid generator
     function create_guid()
     {
         $microTime = microtime();
