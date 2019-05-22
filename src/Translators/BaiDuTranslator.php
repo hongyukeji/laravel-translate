@@ -1,36 +1,44 @@
 <?php
-/**
- * +----------------------------------------------------------------------
- * | laravel-translate [ File Description ]
- * +----------------------------------------------------------------------
- * | Copyright (c) 2015~2019 http://www.wmt.ltd All rights reserved.
- * +----------------------------------------------------------------------
- * | 版权所有：贵州鸿宇叁柒柒科技有限公司
- * +----------------------------------------------------------------------
- * | Author: shadow <admin@hongyuvip.com>  QQ: 1527200768
- * +----------------------------------------------------------------------
- * | Version: v1.0.0  Date:2019-05-22 Time:20:39
- * +----------------------------------------------------------------------
- */
 
-namespace Hongyukeji\LaravelTranslate\Services;
+namespace Hongyukeji\LaravelTranslate\Translators;
 
-use GuzzleHttp\Client;
-use Hongyukeji\LaravelTranslate\Contracts\TranslationService;
+use Hongyukeji\LaravelTranslate\Exceptions\LanguageCodeNotExist;
 
-class BaiDu implements TranslationService
+class BaiDuTranslator implements TranslatorInterface
 {
+    protected $translator;
+    protected $source;
+    protected $target;
+
+    public function __construct()
+    {
+    }
+
+    public function setSource(string $source)
+    {
+        $this->source = strtoupper($source);
+
+        return $this;
+    }
+
+    public function setTarget(string $target)
+    {
+        $this->target = strtoupper($target);
+
+        return $this;
+    }
+
     /**
-     * Translate a string using the Google Cloud Translate API.
+     * 百度翻译
      *
      * @see http://api.fanyi.baidu.com/api/trans/product/apidoc
      *
-     * @param string $text
-     * @param string $target
-     * @return string|null
+     * @param string $string
+     * @return string
      */
-    public function translate(string $text, string $target): ?string
+    public function translate(string $string): string
     {
+        $text = $string;
         // 实例化 HTTP 客户端
         $http = new Client;
         // 初始化配置信息
@@ -78,7 +86,7 @@ class BaiDu implements TranslationService
         if (isset($result['trans_result'][0]['dst'])) {
             return $result['trans_result'][0]['dst'];
         } else {
-            return $text;
+            return '';
         }
     }
 }

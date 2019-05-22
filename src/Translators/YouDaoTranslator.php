@@ -36,6 +36,14 @@ class YouDaoTranslator implements TranslatorInterface
         return $this;
     }
 
+    /**
+     * 有道翻译
+     *
+     * @see https://ai.youdao.com/docs/doc-trans-api.s#p02
+     *
+     * @param string $string
+     * @return string
+     */
     public function translate(string $string): string
     {
         $ret = $this->do_request($string, $this->target);
