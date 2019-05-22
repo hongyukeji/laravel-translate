@@ -22,6 +22,8 @@ class YouDao implements TranslationService
     /**
      * Translate a string using the Google Cloud Translate API.
      *
+     * @see https://ai.youdao.com/docs/doc-trans-api.s#p02
+     *
      * @param string $text
      * @param string $target
      * @return string|null

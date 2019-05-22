@@ -22,6 +22,8 @@ class BaiDu implements TranslationService
     /**
      * Translate a string using the Google Cloud Translate API.
      *
+     * @see http://api.fanyi.baidu.com/api/trans/product/apidoc
+     *
      * @param string $text
      * @param string $target
      * @return string|null
