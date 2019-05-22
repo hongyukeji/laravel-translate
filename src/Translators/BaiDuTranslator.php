@@ -55,7 +55,7 @@ class BaiDuTranslator implements TranslatorInterface
             'appid' => $this->appid,
             'salt'  => rand(10000, 99999),
             'from'  => $from,
-            'to'    => $to,
+            'to'    => $to[0],
         );
         $args['sign'] = $this->buildSign($query, $this->appid, $args['salt'], $this->key);
         $ret = $this->call(self::URL, $args);

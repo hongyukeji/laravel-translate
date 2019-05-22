@@ -46,7 +46,7 @@ return [
     /*
      * Here you can specify the target language code(s). This can be a string or an array.
      */
-    'target_language' => ['zh-CN'],
+    'target_language' => ['zh'],
 
     /*
      * Specify the path to the translation files.
