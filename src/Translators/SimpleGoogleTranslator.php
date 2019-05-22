@@ -15,9 +15,9 @@ class SimpleGoogleTranslator implements TranslatorInterface
     {
         $this->translator = new GoogleTranslate;
 
-        if (config('auto-translate.simple_google_translator.proxy')) {
+        if (config('translate.simple_google_translator.proxy')) {
             $this->translator->setOptions([
-                'proxy' => config('auto-translate.simple_google_translator.proxy'),
+                'proxy' => config('translate.simple_google_translator.proxy'),
             ]);
         }
     }
@@ -43,7 +43,7 @@ class SimpleGoogleTranslator implements TranslatorInterface
     public function translate(string $string) : string
     {
         try {
-            sleep(random_int(config('auto-translate.simple_google_translator.sleep_between_requests')[0], config('auto-translate.simple_google_translator.sleep_between_requests')[1]));
+            sleep(random_int(config('translate.simple_google_translator.sleep_between_requests')[0], config('translate.simple_google_translator.sleep_between_requests')[1]));
 
             return $this->translator->translate($string);
         } catch (\Throwable $th) {
