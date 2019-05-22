@@ -21,7 +21,7 @@ composer require hongyukeji/laravel-translate
 After installation publish the config file:
 
 ```bash
-php artisan vendor:publish --provider="Ben182\AutoTranslate\AutoTranslateServiceProvider"
+php artisan vendor:publish --provider="Hongyukeji\LaravelTranslate\TranslateServiceProvider"
 ```
 
 You can specify your source language, the target language(s), the translator and the path to your language files in there.
