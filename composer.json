@@ -1,0 +1,31 @@
+{
+    "name": "hongyukeji/laravel-translate",
+    "description": "Package description here.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "shadow",
+            "email": "admin@hongyuvip.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "ext-json": "*",
+        "google/cloud-translate": "^1.2"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hongyukeji\\LaravelTranslate\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hongyukeji\\LaravelTranslate\\TranslationServiceProvider"
+            ]
+        }
+    }
+}
