@@ -8,5 +8,5 @@ interface TranslatorInterface
 
     public function setTarget(string $target);
 
-    public function translate(string $string) : string;
+    public function translate(string $string): string;
 }

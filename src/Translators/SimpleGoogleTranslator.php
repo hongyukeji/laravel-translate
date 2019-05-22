@@ -40,7 +40,7 @@ class SimpleGoogleTranslator implements TranslatorInterface
         return $this;
     }
 
-    public function translate(string $string) : string
+    public function translate(string $string): string
     {
         try {
             sleep(random_int(config('translate.simple_google_translator.sleep_between_requests')[0], config('translate.simple_google_translator.sleep_between_requests')[1]));

@@ -32,7 +32,7 @@ class DeeplTranslator implements TranslatorInterface
         return $this;
     }
 
-    public function translate(string $string) : string
+    public function translate(string $string): string
     {
         $translation = new TranslationConfig(
             $string,

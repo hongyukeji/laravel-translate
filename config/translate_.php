@@ -12,7 +12,7 @@ return [
     | Supported: "google"
     |
     */
-    'driver' => 'baidu',
+    'driver'          => 'baidu',
 
     /*
     |--------------------------------------------------------------------------
@@ -24,11 +24,11 @@ return [
     | to the translation service as per their own requirements.
     |
     */
-    'services' => [
+    'services'        => [
         'google' => [
             'key' => env('GOOGLE_TRANSLATE_API_KEY')
         ],
-        'baidu' => [
+        'baidu'  => [
             'appid' => env('BAIDU_TRANSLATE_API_APPID'),
             'key'   => env('BAIDU_TRANSLATE_API_KEY')
         ],
@@ -48,7 +48,7 @@ return [
     | and translate their strings into the specified languages.
     |
     */
-    'methods' => [
+    'methods'         => [
         'trans',
         '__'
     ],
@@ -62,7 +62,7 @@ return [
     | for the translation methods. Sensible defaults are provided.
     |
     */
-    'paths' => [
+    'paths'           => [
         app_path(),
         resource_path()
     ],

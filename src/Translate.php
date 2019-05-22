@@ -30,7 +30,7 @@ class Translate
         $files = $this->manager->files();
 
         foreach ($files as $fileKeyName => $languagesFile) {
-            if (! isset($languagesFile[$lang])) {
+            if (!isset($languagesFile[$lang])) {
                 continue;
             }
 
@@ -111,7 +111,7 @@ class Translate
         }
     }
 
-    public function array_undot(array $dottedArray, array $initialArray = []) : array
+    public function array_undot(array $dottedArray, array $initialArray = []): array
     {
         foreach ($dottedArray as $key => $value) {
             Arr::set($initialArray, $key, $value);

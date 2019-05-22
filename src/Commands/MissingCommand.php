@@ -46,13 +46,13 @@ class MissingCommand extends Command
         $targetLanguages = Arr::wrap(config('translate.target_language'));
 
         $foundLanguages = count($targetLanguages);
-        $this->line('Found '.$foundLanguages.' '.Str::plural('language', $foundLanguages).' to translate');
+        $this->line('Found ' . $foundLanguages . ' ' . Str::plural('language', $foundLanguages) . ' to translate');
 
         $missingCount = 0;
         foreach ($targetLanguages as $targetLanguage) {
             $missing = $this->translator->getMissingTranslations($targetLanguage);
             $missingCount += $missing->count();
-            $this->line('Found '.$missing->count().' missing keys in '.$targetLanguage);
+            $this->line('Found ' . $missing->count() . ' missing keys in ' . $targetLanguage);
         }
 
         $bar = $this->output->createProgressBar($missingCount);
@@ -70,6 +70,6 @@ class MissingCommand extends Command
 
         $bar->finish();
 
-        $this->info("\nTranslated ".$missingCount.' missing language keys.');
+        $this->info("\nTranslated " . $missingCount . ' missing language keys.');
     }
 }

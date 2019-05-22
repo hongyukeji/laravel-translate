@@ -46,7 +46,7 @@ class AllCommand extends Command
         $targetLanguages = Arr::wrap(config('translate.target_language'));
 
         $foundLanguages = count($targetLanguages);
-        $this->line('Found '.$foundLanguages.' '.Str::plural('language', $foundLanguages).' to translate');
+        $this->line('Found ' . $foundLanguages . ' ' . Str::plural('language', $foundLanguages) . ' to translate');
 
         $availableTranslations = 0;
         $sourceTranslations = $this->translator->getSourceTranslations();
@@ -67,6 +67,6 @@ class AllCommand extends Command
 
         $bar->finish();
 
-        $this->info("\nTranslated ".$availableTranslations.' language keys.');
+        $this->info("\nTranslated " . $availableTranslations . ' language keys.');
     }
 }

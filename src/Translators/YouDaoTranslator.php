@@ -58,7 +58,7 @@ class YouDaoTranslator implements TranslatorInterface
             'appKey' => $this->appid,
             'salt'   => $salt,
         );
-        $args['from'] = 'auto';   // $this->source
+        $args['from'] = $this->source;
         $args['to'] = $target;
         $args['signType'] = 'v3';
         $curtime = strtotime("now");
