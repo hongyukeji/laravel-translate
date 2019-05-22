@@ -47,7 +47,6 @@ class BaiDuTranslator implements TranslatorInterface
     public function translate(string $string): string
     {
         $result = $this->do_request($string, 'auto', $this->target);
-        $result = json_decode($result, true);
         return isset($result['trans_result'][0]['dst']) ? $result['trans_result'][0]['dst'] : '';
     }
 
