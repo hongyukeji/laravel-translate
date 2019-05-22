@@ -2,6 +2,7 @@
 
 namespace Hongyukeji\LaravelTranslate\Translators;
 
+use GuzzleHttp\Client;
 use Hongyukeji\LaravelTranslate\Exceptions\LanguageCodeNotExist;
 
 class BaiDuTranslator implements TranslatorInterface
