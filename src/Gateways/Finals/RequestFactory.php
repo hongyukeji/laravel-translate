@@ -21,20 +21,24 @@ use Hongyukeji\LaravelTranslate\Gateways\Interfaces\TranslationConfigInterface;
 
 final class RequestFactory implements RequestFactoryInterface
 {
-    private $authKey;
+    private $api_endpoint;
+    private $appId;
+    private $key;
 
-    public function __construct(string $authKey)
+    public function __construct(string $api_endpoint = null, string $appId = null, string $key = null)
     {
-        $this->authKey = $authKey;
+        $this->api_endpoint = $api_endpoint;
+        $this->appId = $appId;
+        $this->key = $key;
     }
 
     public function createTranslationRequestHandler(TranslationConfigInterface $translation): RequestHandlerInterface
     {
-        return new TranslationRequestHandler($this->authKey, $translation);
+        return new TranslationRequestHandler($this->api_endpoint, $this->appId, $this->key, $translation);
     }
 
     public function createUsageRequestHandler(): RequestHandlerInterface
     {
-        return new UsageRequestHandler($this->authKey);
+        return new UsageRequestHandler($this->api_endpoint, $this->appId, $this->key);
     }
 }

@@ -30,10 +30,17 @@ use Hongyukeji\LaravelTranslate\Gateways\Interfaces\TranslationConfigInterface;
 
 class YouDaoGateway implements GatewayInterface
 {
+    const API_ENDPOINT = 'http://openapi.youdao.com/api';
+
     private $httpClient;
 
     private $requestFactory;
 
+    /**
+     * YouDaoGateway constructor.
+     * @param ClientInterface $httpClient
+     * @param RequestFactoryInterface $requestFactory
+     */
     public function __construct(ClientInterface $httpClient, RequestFactoryInterface $requestFactory)
     {
         $this->httpClient = $httpClient;
@@ -80,14 +87,15 @@ class YouDaoGateway implements GatewayInterface
     }
 
     /**
-     * @param string $apiKey
+     * @param string|null $appId
+     * @param string|null $key
      * @return GatewayInterface
      */
-    public static function create(string $apiKey): GatewayInterface
+    public static function create(string $appId = null, string $key = null): GatewayInterface
     {
         return new self(
             new \GuzzleHttp\Client(),
-            new RequestFactory($apiKey)
+            new RequestFactory(self::API_ENDPOINT, $appId, $key)
         );
     }
 

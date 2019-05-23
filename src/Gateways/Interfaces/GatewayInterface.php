@@ -39,8 +39,9 @@ interface GatewayInterface
     public function translate(string $text, string $target_language): ResponseModelInterface;
 
     /**
-     * @param string $apiKey
+     * @param string|null $appId
+     * @param string|null $key
      * @return GatewayInterface
      */
-    public static function create(string $apiKey): GatewayInterface;
+    public static function create(string $appId = null, string $key = null): GatewayInterface;
 }

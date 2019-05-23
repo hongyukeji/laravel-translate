@@ -21,11 +21,15 @@ final class UsageRequestHandler implements RequestHandlerInterface
 {
     const API_ENDPOINT = 'https://api.deepl.com/v2/usage';
 
-    private $authKey;
+    private $api_endpoint;
+    private $appId;
+    private $key;
 
-    public function __construct(string $authKey)
+    public function __construct(string $api_endpoint = null, string $appId = null, string $key = null)
     {
-        $this->authKey = $authKey;
+        $this->api_endpoint = $api_endpoint;
+        $this->appId = $appId;
+        $this->key = $key;
     }
 
     public function getMethod(): string
@@ -35,7 +39,7 @@ final class UsageRequestHandler implements RequestHandlerInterface
 
     public function getPath(): string
     {
-        return static::API_ENDPOINT;
+        return $this->api_endpoint;
     }
 
     public function getBody(): array

@@ -21,17 +21,19 @@ use Hongyukeji\LaravelTranslate\Gateways\Interfaces\TranslationConfigInterface;
 
 final class TranslationRequestHandler implements RequestHandlerInterface
 {
-
     const SEPARATOR = ',';
-    const API_ENDPOINT = 'https://api.deepl.com/v2/translate';
 
-    private $authKey;
+    private $api_endpoint;
+    private $appId;
+    private $key;
 
     private $translation;
 
-    public function __construct(string $authKey, TranslationConfigInterface $translation)
+    public function __construct(string $api_endpoint = null, string $appId = null, string $key = null, TranslationConfigInterface $translation)
     {
-        $this->authKey = $authKey;
+        $this->api_endpoint = $api_endpoint;
+        $this->appId = $appId;
+        $this->key = $key;
         $this->translation = $translation;
     }
 
@@ -42,7 +44,7 @@ final class TranslationRequestHandler implements RequestHandlerInterface
 
     public function getPath(): string
     {
-        return static::API_ENDPOINT;
+        return $this->api_endpoint;
     }
 
     public function getBody(): array
@@ -50,17 +52,17 @@ final class TranslationRequestHandler implements RequestHandlerInterface
         return [
             'form_params' => array_filter(
                 [
-                    'text' => $this->translation->getText(),
-                    'target_lang' => $this->translation->getTargetLang(),
-                    'source_lang' => $this->translation->getSourceLang(),
-                    'tag_handling' => implode(static::SEPARATOR,
+                    'text'                => $this->translation->getText(),
+                    'target_lang'         => $this->translation->getTargetLang(),
+                    'source_lang'         => $this->translation->getSourceLang(),
+                    'tag_handling'        => implode(static::SEPARATOR,
                         (array)$this->translation->getTagHandling()),
-                    'non_splitting_tags' => implode(static::SEPARATOR,
+                    'non_splitting_tags'  => implode(static::SEPARATOR,
                         (array)$this->translation->getNonSplittingTags()),
-                    'ignore_tags' => implode(static::SEPARATOR, (array)$this->translation->getIgnoreTags()),
-                    'split_sentences' => (string)$this->translation->getSplitSentences(),
+                    'ignore_tags'         => implode(static::SEPARATOR, (array)$this->translation->getIgnoreTags()),
+                    'split_sentences'     => (string)$this->translation->getSplitSentences(),
                     'preserve_formatting' => $this->translation->getPreserveFormatting(),
-                    'auth_key' => $this->authKey,
+                    'auth_key'            => $this->authKey,
                 ]
             )
         ];
