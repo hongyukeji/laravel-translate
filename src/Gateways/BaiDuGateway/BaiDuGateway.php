@@ -244,7 +244,7 @@ class BaiDuGateway
 
         if (empty($responseArray['trans_result']) && isset($responseArray['error_code'])) {
             dump($this->errorTips($responseArray['error_code']));
-        } else {
+        } else if (isset($responseArray['error_code'])) {
             dump($responseArray);
         }
 
