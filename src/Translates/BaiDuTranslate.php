@@ -73,35 +73,7 @@ class BaiDuTranslate
     /**
      * @var array URL Parameters
      */
-    protected $urlParams = [
-        'client'   => 't',
-        'hl'       => 'en',
-        'dt'       => [
-            't',   // Translate
-            'bd',  // Full translate with synonym ($bodyArray[1])
-            'at',// Other translate ($bodyArray[5] - in google translate page this shows when click on translated word)
-            'ex',  // Example part ($bodyArray[13])
-            'ld',  // I don't know ($bodyArray[8])
-            'md',  // Definition part with example ($bodyArray[12])
-            'qca', // I don't know ($bodyArray[8])
-            'rw',  // Read also part ($bodyArray[14])
-            'rm',  // I don't know
-            'ss'   // Full synonym ($bodyArray[11])
-        ],
-        'sl'       => null, // Source language
-        'tl'       => null, // Target language
-        'q'        => null, // String to translate
-        'ie'       => 'UTF-8', // Input encoding
-        'oe'       => 'UTF-8', // Output encoding
-        'multires' => 1,
-        'otf'      => 0,
-        'pc'       => 1,
-        'trs'      => 1,
-        'ssel'     => 0,
-        'tsel'     => 0,
-        'kc'       => 1,
-        'tk'       => null,
-    ];
+    protected $urlParams = [];
 
     /**
      * @var array Regex key-value patterns to replace on response data
@@ -137,9 +109,7 @@ class BaiDuTranslate
             ->setOptions($options)// Options are already set in client constructor tho.
             ->setSource($source)
             ->setTarget($target)
-            ->setSalt($salt ?? rand(10000, 99999))
-            ->setKey($key)
-            ->setAppId($appId);
+            ->setSalt($salt ?? rand(10000, 99999));
     }
 
     public function setAppId(string $appId): self
@@ -251,7 +221,7 @@ class BaiDuTranslate
             ->setOptions($options)// Options are already set in client constructor tho.
             ->setSource($source)
             ->setTarget($target)
-            ->setSalt($salt ?? rand(10000, 99999))
+            ->setSalt($salt)
             ->setKey($key)
             ->setAppId($appId)
             ->translate($string);
@@ -281,8 +251,8 @@ class BaiDuTranslate
         }
 
         // Check if translation exists
-        if (!isset($responseArray[0]) || empty($responseArray[0])) {
-            return null;
+        if (!isset($responseArray['trans_result']) || empty($responseArray['trans_result'])) {
+            return '';
         }
 
         // Detect languages
@@ -318,13 +288,13 @@ class BaiDuTranslate
         if (is_string($responseArray)) {
             return $responseArray;
         } else {
-            if (is_array($responseArray[0])) {
-                return (string)array_reduce($responseArray[0], function ($carry, $item) {
-                    $carry .= $item[0];
+            if (is_array($responseArray['trans_result'])) {
+                return (string)array_reduce($responseArray['trans_result'], function ($carry, $item) {
+                    $carry .= $item['dst'];
                     return $carry;
                 });
             } else {
-                return (string)$responseArray[0];
+                return (string)$responseArray['trans_result'][0]['dst'];
             }
         }
     }
@@ -339,26 +309,18 @@ class BaiDuTranslate
      */
     public function getResponse(string $string): array
     {
-        $queryArray = array_merge($this->urlParams, [
+        $formParams = [
+            'q'     => $string,
             'from'  => $this->source,
             'to'    => $this->target,
             'appid' => $this->appId,
-            'salt'  => rand(10000, 99999),
-            'sign'  => $this->tokenProvider->generateToken($this->source, $this->target, $string, $this->appId, $this->key),
-        ]);
-
-        $queryUrl = preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($queryArray));
-
-        $queryBodyArray = [
-            'q'     => $string,
+            'salt'  => $this->salt,
+            'sign'  => $this->tokenProvider->generateToken($this->source, $this->target, $string, $this->appId, $this->key, $this->salt),
         ];
-
-        $queryBodyEncoded = preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($queryBodyArray));
 
         try {
             $response = $this->client->post($this->url, [
-                    'query' => $queryUrl,
-                    'body'  => $queryBodyEncoded,
+                    'form_params' => $formParams,
                 ] + $this->options);
         } catch (RequestException $e) {
             throw new ErrorException($e->getMessage());
