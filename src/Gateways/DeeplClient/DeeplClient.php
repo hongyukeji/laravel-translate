@@ -67,7 +67,7 @@ class DeeplClient implements DeeplClientInterface
         ));
     }
 
-    public static function create($apiKey): DeeplClientInterface
+    public static function create(string $apiKey): DeeplClientInterface
     {
         return new DeeplClient(
             new \GuzzleHttp\Client(),
