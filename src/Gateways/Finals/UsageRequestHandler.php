@@ -19,8 +19,6 @@ use Hongyukeji\LaravelTranslate\Gateways\Interfaces\RequestHandlerInterface;
 
 final class UsageRequestHandler implements RequestHandlerInterface
 {
-    const API_ENDPOINT = 'https://api.deepl.com/v2/usage';
-
     private $api_endpoint;
     private $appId;
     private $key;

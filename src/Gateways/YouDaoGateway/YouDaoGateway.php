@@ -123,4 +123,33 @@ class YouDaoGateway implements GatewayInterface
             );
         }
     }
+
+    private function generateFormParams()
+    {
+        $q = '';
+        $from = '';
+        $to = '';
+        $appKey = '';
+        $key = '';
+        $salt = rand(10000, 99999);
+        $curtime = strtotime("now");
+        $signStr = $appKey . $this->truncate($q) . $salt . $curtime . $key;
+
+        $formParams = [
+            'q'        => $q,
+            'from'     => $from,
+            'to'       => $to,
+            'appKey'   => $appKey,
+            'salt'     => $salt,
+            'sign'     => hash("sha256", $signStr),
+            'signType' => 'v3',
+            'curtime'  => $curtime,
+        ];
+    }
+
+    function truncate($q)
+    {
+        $len = strlen($q);
+        return $len <= 20 ? $q : (substr($q, 0, 10) . $len . substr($q, $len - 10, $len));
+    }
 }
