@@ -36,6 +36,11 @@ class BaiDuTranslate
     protected $key;
 
     /**
+     * @var string salt
+     */
+    protected $salt;
+
+    /**
      * @var \GuzzleHttp\Client HTTP Client
      */
     protected $client;
@@ -121,14 +126,20 @@ class BaiDuTranslate
      * @param string|null $source Source language
      * @param array|null $options Associative array of http client configuration options
      * @param TokenProviderInterface|null $tokenProvider
+     * @param string|null $appId
+     * @param string|null $key
+     * @param string|null $salt
      */
-    public function __construct(string $target = 'en', string $source = null, array $options = null, TokenProviderInterface $tokenProvider = null)
+    public function __construct(string $target = 'en', string $source = null, array $options = null, TokenProviderInterface $tokenProvider = null, string $appId = null, string $key = null, string $salt = null)
     {
         $this->client = new Client();
         $this->setTokenProvider($tokenProvider ?? new GoogleTokenGenerator)
             ->setOptions($options)// Options are already set in client constructor tho.
             ->setSource($source)
-            ->setTarget($target);
+            ->setTarget($target)
+            ->setSalt($salt ?? rand(10000, 99999))
+            ->setKey($key)
+            ->setAppId($appId);
     }
 
     public function setAppId(string $appId): self
@@ -140,6 +151,12 @@ class BaiDuTranslate
     public function setKey(string $key): self
     {
         $this->key = $key;
+        return $this;
+    }
+
+    public function setSalt(string $salt): self
+    {
+        $this->salt = $salt;
         return $this;
     }
 
@@ -221,17 +238,22 @@ class BaiDuTranslate
      * @param string|null $source
      * @param array $options
      * @param TokenProviderInterface|null $tokenProvider
+     * @param string|null $appId
+     * @param string|null $key
+     * @param string|null $salt
      * @return null|string
      * @throws ErrorException If the HTTP request fails
-     * @throws UnexpectedValueException If received data cannot be decoded
      */
-    public static function trans(string $string, string $target = 'en', string $source = null, array $options = [], TokenProviderInterface $tokenProvider = null)
+    public static function trans(string $string, string $target = 'en', string $source = null, array $options = [], TokenProviderInterface $tokenProvider = null, string $appId = null, string $key = null, string $salt = null)
     {
         return (new self)
             ->setTokenProvider($tokenProvider ?? new GoogleTokenGenerator)
             ->setOptions($options)// Options are already set in client constructor tho.
             ->setSource($source)
             ->setTarget($target)
+            ->setSalt($salt ?? rand(10000, 99999))
+            ->setKey($key)
+            ->setAppId($appId)
             ->translate($string);
     }
 
@@ -318,15 +340,21 @@ class BaiDuTranslate
     public function getResponse(string $string): array
     {
         $queryArray = array_merge($this->urlParams, [
-            'sl' => $this->source,
-            'tl' => $this->target,
-            'tk' => $this->tokenProvider->generateToken($this->source, $this->target, $string),
+            'from'  => $this->source,
+            'to'    => $this->target,
+            'appid' => $this->appId,
+            'salt'  => rand(10000, 99999),
+            'sign'  => $this->tokenProvider->generateToken($this->source, $this->target, $string, $this->appId, $this->key),
         ]);
 
         $queryUrl = preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($queryArray));
 
         $queryBodyArray = [
-            'q' => $string,
+            'q'     => $string,
+            'appid' => $this->appId,
+            'from'  => $this->source,
+            'to'    => $this->target,
+            'sign'  => $this->target,
         ];
 
         $queryBodyEncoded = preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($queryBodyArray));
