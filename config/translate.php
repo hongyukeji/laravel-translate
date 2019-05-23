@@ -24,7 +24,7 @@ return [
     | to the translation service as per their own requirements.
     |
     */
-    'services'        => [
+    'gateways'        => [
         'google' => [
             'key' => env('TRANSLATE_GOOGLE_API_KEY')
         ],

@@ -13,13 +13,13 @@ class BaiDuTranslator implements TranslatorInterface
 
     public function __construct()
     {
-        $appId = config('translate.services.baidu.app_id');
-        $key = config('translate.services.baidu.key');
+        $appId = config('translate.gateways.baidu.app_id');
+        $key = config('translate.gateways.baidu.key');
         $source = config('translate.source_language');
         $target = config('translate.target_language');
         $this->translator = new BaiDuTranslate($target[0]);
 
-        if (config('translate.services.baidu')) {
+        if (config('translate.gateways.baidu')) {
             $this->translator->setAppId($appId);
             $this->translator->setKey($key);
         }
