@@ -20,10 +20,19 @@ use Hongyukeji\LaravelTranslate\Gateways\Interfaces\ResponseModelInterface;
 abstract class AbstractResponseModel implements ResponseModelInterface
 {
     const SETTER_PREFIX = 'set';
+    const MODEL_SETTER = 'setText';
 
     public function hydrate(\stdClass $responseModel): ResponseModelInterface
     {
-        foreach ($responseModel as $key => $value) {
+        $modelSetter = self::MODEL_SETTER;
+        if (!empty($responseModel->translation) && method_exists($this, $modelSetter)) {
+            $value = $responseModel->translation[0];
+            $this->$modelSetter($value);
+        } else {
+            dump($responseModel);
+        }
+
+        /*foreach ($responseModel as $key => $value) {
 
             if (is_array($value)) {
                 $this->hydrate(current($value));
@@ -35,7 +44,7 @@ abstract class AbstractResponseModel implements ResponseModelInterface
                 $this->$modelSetter($value);
             }
 
-        }
+        }*/
 
         return $this;
     }

@@ -49,22 +49,27 @@ final class TranslationRequestHandler implements RequestHandlerInterface
 
     public function getBody(): array
     {
+        $salt = rand(10000, 99999);
+        $curtime = strtotime("now");
         return [
             'form_params' => array_filter(
                 [
-                    'text'                => $this->translation->getText(),
-                    'target_lang'         => $this->translation->getTargetLang(),
-                    'source_lang'         => $this->translation->getSourceLang(),
-                    'tag_handling'        => implode(static::SEPARATOR,
-                        (array)$this->translation->getTagHandling()),
-                    'non_splitting_tags'  => implode(static::SEPARATOR,
-                        (array)$this->translation->getNonSplittingTags()),
-                    'ignore_tags'         => implode(static::SEPARATOR, (array)$this->translation->getIgnoreTags()),
-                    'split_sentences'     => (string)$this->translation->getSplitSentences(),
-                    'preserve_formatting' => $this->translation->getPreserveFormatting(),
-                    'auth_key'            => $this->authKey,
+                    'q'        => $this->translation->getText(),
+                    'from'     => strtolower($this->translation->getSourceLang()),
+                    'to'       => strtolower($this->translation->getTargetLang()),
+                    'appKey'   => $this->appId,
+                    'salt'     => $salt,
+                    'sign'     => hash("sha256", $this->appId . $this->truncate($this->translation->getText()) . $salt . $curtime . $this->key),
+                    'signType' => 'v3',
+                    'curtime'  => $curtime,
                 ]
             )
         ];
+    }
+
+    function truncate($q)
+    {
+        $len = strlen($q);
+        return $len <= 20 ? $q : (substr($q, 0, 10) . $len . substr($q, $len - 10, $len));
     }
 }
