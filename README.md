@@ -1,10 +1,30 @@
-<p align="center"><a href="https://github.com/hongyukeji/laravel-translate/releases"><img src="https://camo.githubusercontent.com/7aeaaffdab372bb7f1a7bc771400d9e18295916b/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f72656c656173652f62656e3138322f6c61726176656c2d6175746f2d7472616e736c6174652e7376673f7374796c653d666c61742d737175617265" alt="Latest Version" data-canonical-src="https://img.shields.io/github/release/hongyukeji/laravel-translate.svg?style=flat-square" style="max-width:100%;"></a>
-<a href="https://travis-ci.org/hongyukeji/laravel-translate" rel="nofollow"><img src="https://camo.githubusercontent.com/8c01aa130a16fabf6a8e313719f4f274c7c401b4/68747470733a2f2f696d672e736869656c64732e696f2f7472617669732f62656e3138322f6c61726176656c2d6175746f2d7472616e736c6174652f6d61737465722e7376673f7374796c653d666c61742d737175617265" alt="Build Status" data-canonical-src="https://img.shields.io/travis/hongyukeji/laravel-translate/master.svg?style=flat-square" style="max-width:100%;"></a>
-<a href="https://scrutinizer-ci.com/g/hongyukeji/laravel-translate" rel="nofollow"><img src="https://camo.githubusercontent.com/a2132ab348aaaeae4e0cfee432965a86b8d6b7af/68747470733a2f2f696d672e736869656c64732e696f2f7363727574696e697a65722f672f62656e3138322f6c61726176656c2d6175746f2d7472616e736c6174652e7376673f7374796c653d666c61742d737175617265" alt="Quality Score" data-canonical-src="https://img.shields.io/scrutinizer/g/hongyukeji/laravel-translate.svg?style=flat-square" style="max-width:100%;"></a></p>
+<h1 align="center">Laravel语言翻译 - 翻译，从未如此简单</h1>
 
-With this package you can translate your language files using a translator service. The package ships with a free Google Translate version and Deepl.
+<p align="center">
+<a href="https://packagist.org/packages/hongyukeji/laravel-translate"><img src="https://poser.pugx.org/hongyukeji/laravel-translate/v/stable" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/hongyukeji/laravel-translate"><img src="https://poser.pugx.org/hongyukeji/laravel-translate/downloads" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/hongyukeji/laravel-translate"><img src="https://poser.pugx.org/hongyukeji/laravel-translate/v/unstable" alt="Latest Unstable Version"></a>
+<a href="https://packagist.org/packages/hongyukeji/laravel-translate"><img src="https://poser.pugx.org/hongyukeji/laravel-translate/license" alt="License"></a>
+</p>
 
-Specify a source language and a target language and it will automatically translate your files. This is useful if you want to prototype something quickly or just a first idea of the translation for later editing. The package ships with two artisan commands. One for translating all the missing translations that are set in the source language but not in the target language. The other one for translating all source language files and overwriting everything in the target language.
+> 全网首款支持所有语言翻译插件，自由扩展，无缝对接。
+
+> 采用鸿宇科技专利[《宏观设计模式》](docs/README.md)开发。
+
+> 更多请点击 [https://www.hongyuvip.com](https://www.hongyuvip.com)
+
+## 特点
+
+- 支持全网络翻译服务商
+- 支持自由扩展且易维护
+
+## 支持
+
+- [百度翻译](http://fanyi-api.baidu.com/api/trans/product/index)
+- [有道翻译](https://ai.youdao.com/product-fanyi.s)
+- 上述语言翻译服务商比较常用，其他短信如有需要可联系[Shadow](http://wpa.qq.com/msgrd?v=3&uin=1527200768&site=qq&menu=yes)集成
+- 如需支持其他语言服务商，可以自行Fork，在`src/Sms.php`中添加对应的语言发送方法即可
+- 语言快速集成（参考[《宏观设计模式》](docs/README.md) — 鸿宇科技出品）
 
 ## Installation
 
