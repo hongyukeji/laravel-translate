@@ -1,6 +1,6 @@
 <?php
 
-namespace Hongyukeji\LaravelTranslate;
+namespace Hongyukeji\LaravelTranslate\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

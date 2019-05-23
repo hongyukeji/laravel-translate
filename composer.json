@@ -43,7 +43,7 @@
                 "Hongyukeji\\LaravelTranslate\\TranslateServiceProvider"
             ],
             "aliases": {
-                "Translate": "Hongyukeji\\LaravelTranslate\\TranslateFacade"
+                "Translate": "Hongyukeji\\LaravelTranslate\\Facades\\TranslateFacade"
             }
         }
     }
