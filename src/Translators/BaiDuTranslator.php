@@ -15,10 +15,7 @@ class BaiDuTranslator implements TranslatorInterface
     {
         $appId = config('translate.gateways.baidu.app_id');
         $key = config('translate.gateways.baidu.key');
-        $source = config('translate.source_language');
-        $target = config('translate.target_language');
-        $this->translator = new BaiDuTranslate($target[0]);
-
+        $this->translator = new BaiDuTranslate();
         if (!empty($appId) && !empty($key)) {
             $this->translator->setAppId($appId);
             $this->translator->setKey($key);
@@ -42,6 +39,7 @@ class BaiDuTranslator implements TranslatorInterface
     public function translate(string $string): string
     {
         try {
+            $this->translator->setSource($this->source)->setTarget($this->target)->setTarget($this->target);
             return $this->translator->translate($string);
         } catch (\Throwable $th) {
             if ($th->getMessage() === 'Return value of Stichoza\GoogleTranslate\GoogleTranslate::translate() must be of the type string, null returned') {

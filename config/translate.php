@@ -55,6 +55,9 @@ return [
 
     /*
      * This is the translator used to translate the source language files. You can also specify your own here if you wish. It has to implement \Ben182\AutoTranslate\Translators\TranslatorInterface.
+     *
+     * \Hongyukeji\LaravelTranslate\Translators\BaiDuTranslator::class
+     * \Hongyukeji\LaravelTranslate\Translators\YouDaoTranslator::class
      */
     'translator'      => env('TRANSLATE_TRANSLATOR', \Hongyukeji\LaravelTranslate\Translators\BaiDuTranslator::class),
 

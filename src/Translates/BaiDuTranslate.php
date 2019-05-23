@@ -242,6 +242,10 @@ class BaiDuTranslate
     {
         $responseArray = $this->getResponse($string);
 
+        if (empty($responseArray['trans_result'])) {
+            dump($responseArray);
+        }
+
         /*
          * if response in text and the content has zero the empty returns true, lets check
          * if response is string and not empty and create array for further logic
@@ -311,11 +315,11 @@ class BaiDuTranslate
     {
         $formParams = [
             'q'     => $string,
-            'from'  => $this->source,
-            'to'    => $this->target,
+            'from'  => strtolower($this->source),
+            'to'    => strtolower($this->target),
             'appid' => $this->appId,
             'salt'  => $this->salt,
-            'sign'  => $this->tokenProvider->generateToken($this->source, $this->target, $string, $this->appId, $this->key, $this->salt),
+            'sign'  => $this->tokenProvider->generateToken(strtolower($this->source), strtolower($this->target), $string, $this->appId, $this->key, $this->salt),
         ];
 
         try {
