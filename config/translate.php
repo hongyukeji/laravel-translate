@@ -12,7 +12,7 @@ return [
     | Supported: "google"
     |
     */
-    'driver'          => 'baidu',
+    'driver'          => env('TRANSLATE_DRIVER', 'baidu'),
 
     /*
     |--------------------------------------------------------------------------
@@ -26,22 +26,22 @@ return [
     */
     'services'        => [
         'google' => [
-            'key' => env('GOOGLE_TRANSLATE_API_KEY')
+            'key' => env('TRANSLATE_GOOGLE_API_KEY')
         ],
         'baidu'  => [
-            'app_id' => env('BAIDU_TRANSLATE_API_APP_ID'),
-            'key'   => env('BAIDU_TRANSLATE_API_KEY')
+            'app_id' => env('TRANSLATE_BAIDU_API_APP_ID'),
+            'key'    => env('TRANSLATE_BAIDU_API_KEY')
         ],
         'youdao' => [
-            'app_id' => env('YOUDAO_TRANSLATE_API_APP_ID'),
-            'key'   => env('YOUDAO_TRANSLATE_API_KEY')
+            'app_id' => env('TRANSLATE_YOUDAO_API_APP_ID'),
+            'key'    => env('TRANSLATE_YOUDAO_API_KEY')
         ]
     ],
 
     /*
      * Here you can specify the source language code.
      */
-    'source_language' => 'en',
+    'source_language' => env('TRANSLATE_SOURCE_LANGUAGE', 'en'),
 
     /*
      * Here you can specify the target language code(s). This can be a string or an array.
@@ -56,7 +56,7 @@ return [
     /*
      * This is the translator used to translate the source language files. You can also specify your own here if you wish. It has to implement \Ben182\AutoTranslate\Translators\TranslatorInterface.
      */
-    'translator'      => \Hongyukeji\LaravelTranslate\Translators\YouDaoTranslator::class,
+    'translator'      => env('TRANSLATE_TRANSLATOR', \Hongyukeji\LaravelTranslate\Translators\YouDaoTranslator::class),
 
     'simple_google_translator' => [
 
@@ -70,6 +70,6 @@ return [
     'deepl' => [
 
         // Your DeepL API Key. See https://www.deepl.com/pro.html#developer
-        'api_key' => '',
+        'api_key' => env('TRANSLATE_DEEPL_API_KEY'),
     ],
 ];
