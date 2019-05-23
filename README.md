@@ -44,7 +44,7 @@ If you have lots of translations to make I recommend Deepl. It is fast, reliable
 Simply call the artisan missing command for translating all the translations that are set in your source language, but not in your target language:
 
 ```bash
-php artisan autotrans:missing
+php artisan translate:missing
 ```
 
 E.g. you have English set as your source language. The source language has translations in auth.php:
@@ -75,7 +75,7 @@ The artisan missing command will then translate the missing `auth.throttle` key.
 To overwrite all your existing target language keys with the translation of the source language simply call:
 
 ```bash
-php artisan autotrans:all
+php artisan translate:all
 ```
 
 This will overwrite every single key with a translation of the equivalent source language key.
