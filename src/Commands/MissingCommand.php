@@ -5,6 +5,7 @@ namespace Hongyukeji\LaravelTranslate\Commands;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
+use Hongyukeji\LaravelTranslate\Translate;
 use Hongyukeji\LaravelTranslate\Translates;
 
 class MissingCommand extends Command
@@ -28,7 +29,7 @@ class MissingCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @param Translate $translator
      */
     public function __construct(Translate $translator)
     {

@@ -55,7 +55,7 @@ class Translate
         return collect($dottedSource)->only($diff);
     }
 
-    public function translate(string $targetLanguage, $data, $callbackAfterEachTranslation = null)
+    public function translate(string $targetLanguage, $data, callable $callbackAfterEachTranslation = null)
     {
         $this->translator->setTarget($targetLanguage);
 
