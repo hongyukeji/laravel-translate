@@ -18,8 +18,6 @@ class YouDaoTranslator implements TranslatorInterface
         if (config('translate.services.youdao')) {
             $this->translator->setAppId(config('translate.services.youdao.app_id'));
             $this->translator->setKey(config('translate.services.youdao.key'));
-            $this->translator->setTarget($this->target);
-            $this->translator->setSource($this->source);
         }
     }
 

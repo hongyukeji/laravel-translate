@@ -19,9 +19,8 @@ class BaiDuTranslator implements TranslatorInterface
             $this->translator->setAppId(config('translate.services.baidu.app_id'));
             $this->translator->setKey(config('translate.services.baidu.key'));
             //$this->translator->setOptions([]);
-            $this->translator->setTarget($this->target);
-            $this->translator->setSource($this->source);
         }
+
     }
 
     public function setSource(string $source)
