@@ -14,7 +14,7 @@ class MissingCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'translate:missing';
+    protected $signature = 'autotrans:missing';
 
     /**
      * The console command description.

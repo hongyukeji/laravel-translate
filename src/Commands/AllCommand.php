@@ -14,7 +14,7 @@ class AllCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'translate:all';
+    protected $signature = 'autotrans:all';
 
     /**
      * The console command description.
