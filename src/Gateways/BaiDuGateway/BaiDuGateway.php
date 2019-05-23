@@ -1,7 +1,7 @@
 <?php
 /**
  * +----------------------------------------------------------------------
- * | 有道翻译 [ https://ai.youdao.com/docs/doc-trans-api.s#p02 ]
+ * | 百度翻译 [ http://api.fanyi.baidu.com/api/trans/product/apidoc ]
  * +----------------------------------------------------------------------
  * | Copyright (c) 2015~2019 http://www.wmt.ltd All rights reserved.
  * +----------------------------------------------------------------------
@@ -9,21 +9,21 @@
  * +----------------------------------------------------------------------
  * | Author: shadow <admin@hongyuvip.com>  QQ: 1527200768
  * +----------------------------------------------------------------------
- * | Version: v1.0.0  Date:2019-05-23 Time:08:22
+ * | Version: v1.0.0  Date:2019-05-23 Time:08:21
  * +----------------------------------------------------------------------
  */
 
-namespace Hongyukeji\LaravelTranslate\Translates;
+namespace Hongyukeji\LaravelTranslate\Gateways;
 
-use BadMethodCallException;
 use ErrorException;
 use GuzzleHttp\Client;
+use BadMethodCallException;
 use GuzzleHttp\Exception\RequestException;
-use Hongyukeji\LaravelTranslate\Tokens\GoogleTokenGenerator;
-use Hongyukeji\LaravelTranslate\Tokens\TokenProviderInterface;
+use Hongyukeji\LaravelTranslate\Gateways\Tokens\BaiDuTokenGenerator;
+use Hongyukeji\LaravelTranslate\Gateways\Tokens\TokenProviderInterface;
 use UnexpectedValueException;
 
-class YouDaoTranslate
+class BaiDuGateway
 {
     /**
      * @var string appId
@@ -34,6 +34,11 @@ class YouDaoTranslate
      * @var string key
      */
     protected $key;
+
+    /**
+     * @var string salt
+     */
+    protected $salt;
 
     /**
      * @var \GuzzleHttp\Client HTTP Client
@@ -58,7 +63,7 @@ class YouDaoTranslate
     /**
      * @var string Google Translate URL base
      */
-    protected $url = 'http://openapi.youdao.com/api';
+    protected $url = 'http://api.fanyi.baidu.com/api/trans/vip/translate';
 
     /**
      * @var array Dynamic GuzzleHttp client options
@@ -68,35 +73,7 @@ class YouDaoTranslate
     /**
      * @var array URL Parameters
      */
-    protected $urlParams = [
-        'client'   => 't',
-        'hl'       => 'en',
-        'dt'       => [
-            't',   // Translate
-            'bd',  // Full translate with synonym ($bodyArray[1])
-            'at',// Other translate ($bodyArray[5] - in google translate page this shows when click on translated word)
-            'ex',  // Example part ($bodyArray[13])
-            'ld',  // I don't know ($bodyArray[8])
-            'md',  // Definition part with example ($bodyArray[12])
-            'qca', // I don't know ($bodyArray[8])
-            'rw',  // Read also part ($bodyArray[14])
-            'rm',  // I don't know
-            'ss'   // Full synonym ($bodyArray[11])
-        ],
-        'sl'       => null, // Source language
-        'tl'       => null, // Target language
-        'q'        => null, // String to translate
-        'ie'       => 'UTF-8', // Input encoding
-        'oe'       => 'UTF-8', // Output encoding
-        'multires' => 1,
-        'otf'      => 0,
-        'pc'       => 1,
-        'trs'      => 1,
-        'ssel'     => 0,
-        'tsel'     => 0,
-        'kc'       => 1,
-        'tk'       => null,
-    ];
+    protected $urlParams = [];
 
     /**
      * @var array Regex key-value patterns to replace on response data
@@ -121,14 +98,18 @@ class YouDaoTranslate
      * @param string|null $source Source language
      * @param array|null $options Associative array of http client configuration options
      * @param TokenProviderInterface|null $tokenProvider
+     * @param string|null $appId
+     * @param string|null $key
+     * @param string|null $salt
      */
-    public function __construct(string $target = 'en', string $source = null, array $options = null, TokenProviderInterface $tokenProvider = null)
+    public function __construct(string $target = 'en', string $source = null, array $options = null, TokenProviderInterface $tokenProvider = null, string $appId = null, string $key = null, string $salt = null)
     {
         $this->client = new Client();
-        $this->setTokenProvider($tokenProvider ?? new GoogleTokenGenerator)
+        $this->setTokenProvider($tokenProvider ?? new BaiDuTokenGenerator)
             ->setOptions($options)// Options are already set in client constructor tho.
             ->setSource($source)
-            ->setTarget($target);
+            ->setTarget($target)
+            ->setSalt($salt ?? rand(10000, 99999));
     }
 
     public function setAppId(string $appId): self
@@ -143,11 +124,17 @@ class YouDaoTranslate
         return $this;
     }
 
+    public function setSalt(string $salt): self
+    {
+        $this->salt = $salt;
+        return $this;
+    }
+
     /**
      * Set target language for translation.
      *
      * @param string $target Language code
-     * @return GoogleTranslate
+     * @return BaiDuTranslate
      */
     public function setTarget(string $target): self
     {
@@ -159,7 +146,7 @@ class YouDaoTranslate
      * Set source language for translation.
      *
      * @param string|null $source Language code
-     * @return GoogleTranslate
+     * @return BaiDuTranslate
      */
     public function setSource(string $source = null): self
     {
@@ -171,7 +158,7 @@ class YouDaoTranslate
      * Set Google Translate URL base
      *
      * @param string $url Google Translate URL base
-     * @return GoogleTranslate
+     * @return BaiDuTranslate
      */
     public function setUrl(string $url): self
     {
@@ -183,7 +170,7 @@ class YouDaoTranslate
      * Set GuzzleHttp client options.
      *
      * @param array $options guzzleHttp client options.
-     * @return GoogleTranslate
+     * @return BaiDuTranslate
      */
     public function setOptions(array $options = null): self
     {
@@ -195,7 +182,7 @@ class YouDaoTranslate
      * Set token provider.
      *
      * @param TokenProviderInterface $tokenProvider
-     * @return GoogleTranslate
+     * @return BaiDuTranslate
      */
     public function setTokenProvider(TokenProviderInterface $tokenProvider): self
     {
@@ -221,17 +208,22 @@ class YouDaoTranslate
      * @param string|null $source
      * @param array $options
      * @param TokenProviderInterface|null $tokenProvider
+     * @param string|null $appId
+     * @param string|null $key
+     * @param string|null $salt
      * @return null|string
      * @throws ErrorException If the HTTP request fails
-     * @throws UnexpectedValueException If received data cannot be decoded
      */
-    public static function trans(string $string, string $target = 'en', string $source = null, array $options = [], TokenProviderInterface $tokenProvider = null)
+    public static function trans(string $string, string $target = 'en', string $source = null, array $options = [], TokenProviderInterface $tokenProvider = null, string $appId = null, string $key = null, string $salt = null)
     {
         return (new self)
-            ->setTokenProvider($tokenProvider ?? new GoogleTokenGenerator)
+            ->setTokenProvider($tokenProvider ?? new BaiDuTokenGenerator)
             ->setOptions($options)// Options are already set in client constructor tho.
             ->setSource($source)
             ->setTarget($target)
+            ->setSalt($salt)
+            ->setKey($key)
+            ->setAppId($appId)
             ->translate($string);
     }
 
@@ -250,6 +242,10 @@ class YouDaoTranslate
     {
         $responseArray = $this->getResponse($string);
 
+        if (empty($responseArray['trans_result'])) {
+            dump($responseArray);
+        }
+
         /*
          * if response in text and the content has zero the empty returns true, lets check
          * if response is string and not empty and create array for further logic
@@ -259,8 +255,8 @@ class YouDaoTranslate
         }
 
         // Check if translation exists
-        if (!isset($responseArray[0]) || empty($responseArray[0])) {
-            return null;
+        if (!isset($responseArray['trans_result']) || empty($responseArray['trans_result'])) {
+            return '';
         }
 
         // Detect languages
@@ -296,13 +292,13 @@ class YouDaoTranslate
         if (is_string($responseArray)) {
             return $responseArray;
         } else {
-            if (is_array($responseArray[0])) {
-                return (string)array_reduce($responseArray[0], function ($carry, $item) {
-                    $carry .= $item[0];
+            if (is_array($responseArray['trans_result'])) {
+                return (string)array_reduce($responseArray['trans_result'], function ($carry, $item) {
+                    $carry .= $item['dst'];
                     return $carry;
                 });
             } else {
-                return (string)$responseArray[0];
+                return (string)$responseArray['trans_result'][0]['dst'];
             }
         }
     }
@@ -317,24 +313,18 @@ class YouDaoTranslate
      */
     public function getResponse(string $string): array
     {
-        $queryArray = array_merge($this->urlParams, [
-            'sl' => $this->source,
-            'tl' => $this->target,
-            'tk' => $this->tokenProvider->generateToken($this->source, $this->target, $string),
-        ]);
-
-        $queryUrl = preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($queryArray));
-
-        $queryBodyArray = [
-            'q' => $string,
+        $formParams = [
+            'q'     => $string,
+            'from'  => strtolower($this->source),
+            'to'    => strtolower($this->target),
+            'appid' => $this->appId,
+            'salt'  => $this->salt,
+            'sign'  => $this->tokenProvider->generateToken(strtolower($this->source), strtolower($this->target), $string, $this->appId, $this->key, $this->salt),
         ];
-
-        $queryBodyEncoded = preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($queryBodyArray));
 
         try {
             $response = $this->client->post($this->url, [
-                    'query' => $queryUrl,
-                    'body'  => $queryBodyEncoded,
+                    'form_params' => $formParams,
                 ] + $this->options);
         } catch (RequestException $e) {
             throw new ErrorException($e->getMessage());
@@ -364,35 +354,38 @@ class YouDaoTranslate
         return (bool)preg_match('/^([a-z]{2})(-[A-Z]{2})?$/', $lang);
     }
 
-    public function user_translate($string)
+    function use_translate($string)
     {
-        $result = $this->do_request($string, $this->target);
-        $result = json_decode($result, true);
-        return isset($result['translation'][0]) ? $result['translation'][0] : '';
+        $result = $this->do_request($string, $this->source, $this->target);
+        return isset($result['trans_result'][0]['dst']) ? $result['trans_result'][0]['dst'] : '';
     }
 
-    function do_request($q, $target)
+    function do_request($query, $from, $to)
     {
-        $salt = $this->create_guid();
         $args = array(
-            'q'      => $q,
-            'appKey' => $this->appid,
-            'salt'   => $salt,
+            'q'     => $query,
+            'appid' => $this->appid,
+            'salt'  => rand(10000, 99999),
+            'from'  => $from,
+            'to'    => $to[0],
         );
-        $args['from'] = $this->source;
-        $args['to'] = $target;
-        $args['signType'] = 'v3';
-        $curtime = strtotime("now");
-        $args['curtime'] = $curtime;
-        $signStr = $this->appid . $this->truncate($q) . $salt . $curtime . $this->key;
-        $args['sign'] = hash("sha256", $signStr);
+        $args['sign'] = $this->buildSign($query, $this->appid, $args['salt'], $this->key);
         $ret = $this->call(self::URL, $args);
+        $ret = json_decode($ret, true);
         return $ret;
     }
 
-    // 发起网络请求
+    //加密
+    function buildSign($query, $appID, $salt, $secKey)
+    {/*{{{*/
+        $str = $appID . $query . $salt . $secKey;
+        $ret = md5($str);
+        return $ret;
+    }/*}}}*/
+
+    //发起网络请求
     function call($url, $args = null, $method = "post", $testflag = 0, $timeout = self::CURL_TIMEOUT, $headers = array())
-    {
+    {/*{{{*/
         $ret = false;
         $i = 0;
         while ($ret === false) {
@@ -405,10 +398,10 @@ class YouDaoTranslate
             $i++;
         }
         return $ret;
-    }
+    }/*}}}*/
 
     function callOnce($url, $args = null, $method = "post", $withCookie = false, $timeout = self::CURL_TIMEOUT, $headers = array())
-    {
+    {/*{{{*/
         $ch = curl_init();
         if ($method == "post") {
             $data = $this->convert($args);
@@ -436,10 +429,10 @@ class YouDaoTranslate
         $r = curl_exec($ch);
         curl_close($ch);
         return $r;
-    }
+    }/*}}}*/
 
     function convert(&$args)
-    {
+    {/*{{{*/
         $data = '';
         if (is_array($args)) {
             foreach ($args as $key => $val) {
@@ -454,54 +447,5 @@ class YouDaoTranslate
             return trim($data, "&");
         }
         return $args;
-    }
-
-    // uuid generator
-    function create_guid()
-    {
-        $microTime = microtime();
-        list($a_dec, $a_sec) = explode(" ", $microTime);
-        $dec_hex = dechex($a_dec * 1000000);
-        $sec_hex = dechex($a_sec);
-        $this->ensure_length($dec_hex, 5);
-        $this->ensure_length($sec_hex, 6);
-        $guid = "";
-        $guid .= $dec_hex;
-        $guid .= $this->create_guid_section(3);
-        $guid .= '-';
-        $guid .= $this->create_guid_section(4);
-        $guid .= '-';
-        $guid .= $this->create_guid_section(4);
-        $guid .= '-';
-        $guid .= $this->create_guid_section(4);
-        $guid .= '-';
-        $guid .= $sec_hex;
-        $guid .= $this->create_guid_section(6);
-        return $guid;
-    }
-
-    function create_guid_section($characters)
-    {
-        $return = "";
-        for ($i = 0; $i < $characters; $i++) {
-            $return .= dechex(mt_rand(0, 15));
-        }
-        return $return;
-    }
-
-    function truncate($q)
-    {
-        $len = strlen($q);
-        return $len <= 20 ? $q : (substr($q, 0, 10) . $len . substr($q, $len - 10, $len));
-    }
-
-    function ensure_length(&$string, $length)
-    {
-        $strlen = strlen($string);
-        if ($strlen < $length) {
-            $string = str_pad($string, $length, "0");
-        } else if ($strlen > $length) {
-            $string = substr($string, 0, $length);
-        }
-    }
+    }/*}}}*/
 }

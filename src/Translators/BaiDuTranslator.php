@@ -2,7 +2,7 @@
 
 namespace Hongyukeji\LaravelTranslate\Translators;
 
-use Hongyukeji\LaravelTranslate\Translates\BaiDuTranslate;
+use Hongyukeji\LaravelTranslate\Gateways\BaiDuGateway;
 use Hongyukeji\LaravelTranslate\Exceptions\LanguageCodeNotExist;
 
 class BaiDuTranslator implements TranslatorInterface
@@ -15,7 +15,7 @@ class BaiDuTranslator implements TranslatorInterface
     {
         $appId = config('translate.gateways.baidu.app_id');
         $key = config('translate.gateways.baidu.key');
-        $this->translator = new BaiDuTranslate();
+        $this->translator = new BaiDuGateway();
         if (!empty($appId) && !empty($key)) {
             $this->translator->setAppId($appId);
             $this->translator->setKey($key);

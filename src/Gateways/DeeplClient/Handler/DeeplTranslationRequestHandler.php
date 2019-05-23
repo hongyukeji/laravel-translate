@@ -41,17 +41,17 @@ final class DeeplTranslationRequestHandler implements DeeplRequestHandlerInterfa
         return [
             'form_params' => array_filter(
                 [
-                    'text' => $this->translation->getText(),
-                    'target_lang' => $this->translation->getTargetLang(),
-                    'source_lang' => $this->translation->getSourceLang(),
-                    'tag_handling' => implode(static::SEPARATOR,
+                    'text'                => $this->translation->getText(),
+                    'target_lang'         => $this->translation->getTargetLang(),
+                    'source_lang'         => $this->translation->getSourceLang(),
+                    'tag_handling'        => implode(static::SEPARATOR,
                         (array)$this->translation->getTagHandling()),
-                    'non_splitting_tags' => implode(static::SEPARATOR,
+                    'non_splitting_tags'  => implode(static::SEPARATOR,
                         (array)$this->translation->getNonSplittingTags()),
-                    'ignore_tags' => implode(static::SEPARATOR, (array)$this->translation->getIgnoreTags()),
-                    'split_sentences' => (string)$this->translation->getSplitSentences(),
+                    'ignore_tags'         => implode(static::SEPARATOR, (array)$this->translation->getIgnoreTags()),
+                    'split_sentences'     => (string)$this->translation->getSplitSentences(),
                     'preserve_formatting' => $this->translation->getPreserveFormatting(),
-                    'auth_key' => $this->authKey,
+                    'auth_key'            => $this->authKey,
                 ]
             )
         ];

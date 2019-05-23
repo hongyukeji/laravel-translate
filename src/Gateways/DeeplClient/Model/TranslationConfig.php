@@ -36,7 +36,8 @@ final class TranslationConfig implements TranslationConfigInterface
         array $ignoreTags = [],
         bool $splitSentences = true,
         bool $preserveFormatting = false
-    ) {
+    )
+    {
         $this->setText($text);
         $this->setTargetLang($targetLang);
         $this->setSourceLang($sourceLang);

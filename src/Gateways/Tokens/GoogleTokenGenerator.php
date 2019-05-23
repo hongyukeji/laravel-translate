@@ -1,6 +1,6 @@
 <?php
 
-namespace Hongyukeji\LaravelTranslate\Tokens;
+namespace Hongyukeji\LaravelTranslate\Gateways\Tokens;
 
 /**
  * Google Token Generator.
@@ -18,7 +18,7 @@ class GoogleTokenGenerator implements TokenProviderInterface
      * @param string $text Text to translate
      * @return string Token
      */
-    public function generateToken(string $source, string $target, string $text) : string
+    public function generateToken(string $source, string $target, string $text): string
     {
         return $this->TL($text);
     }
@@ -67,7 +67,7 @@ class GoogleTokenGenerator implements TokenProviderInterface
         }
         $a = fmod($a, pow(10, 6));
 
-        return $a.'.'.($a ^ $b);
+        return $a . '.' . ($a ^ $b);
     }
 
     /**
@@ -129,7 +129,7 @@ class GoogleTokenGenerator implements TokenProviderInterface
             $a &= 2147483647;
             $a |= 0x40000000;
             $a = ($a >> ($b - 1));
-        } else { 
+        } else {
             $a = ($a >> $b);
         }
 
@@ -140,13 +140,14 @@ class GoogleTokenGenerator implements TokenProviderInterface
      * Get JS charCodeAt equivalent result with UTF-16 encoding
      *
      * @param string $str
-     * @param int    $index
+     * @param int $index
      *
      * @return number
      */
-    private function JS_charCodeAt($str, $index) {
+    private function JS_charCodeAt($str, $index)
+    {
         $utf16 = mb_convert_encoding($str, 'UTF-16LE', 'UTF-8');
-        return ord($utf16[$index*2]) + (ord($utf16[$index*2+1]) << 8);
+        return ord($utf16[$index * 2]) + (ord($utf16[$index * 2 + 1]) << 8);
     }
 
     /**
@@ -156,8 +157,9 @@ class GoogleTokenGenerator implements TokenProviderInterface
      *
      * @return number
      */
-    private function JS_length($str) {
+    private function JS_length($str)
+    {
         $utf16 = mb_convert_encoding($str, 'UTF-16LE', 'UTF-8');
-        return strlen($utf16)/2;
+        return strlen($utf16) / 2;
     }
 }

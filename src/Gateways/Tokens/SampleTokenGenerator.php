@@ -1,6 +1,6 @@
 <?php
 
-namespace Hongyukeji\LaravelTranslate\Tokens;
+namespace Hongyukeji\LaravelTranslate\Gateways\Tokens;
 
 /**
  * A nice interface for providing tokens.
