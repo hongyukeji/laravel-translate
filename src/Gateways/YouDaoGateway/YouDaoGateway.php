@@ -38,6 +38,9 @@ class YouDaoGateway implements GatewayInterface
 
     /**
      * YouDaoGateway constructor.
+     *
+     * @see https://ai.youdao.com/docs/doc-trans-api.s
+     *
      * @param ClientInterface $httpClient
      * @param RequestFactoryInterface $requestFactory
      */
