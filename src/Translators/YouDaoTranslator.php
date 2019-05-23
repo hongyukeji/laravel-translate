@@ -15,7 +15,9 @@
 
 namespace Hongyukeji\LaravelTranslate\Translators;
 
-
+use Hongyukeji\LaravelTranslate\Exceptions\LanguageCodeNotExist;
+use Hongyukeji\LaravelTranslate\Gateways\Exceptions\RequestException;
+use Hongyukeji\LaravelTranslate\Gateways\Finals\TranslationConfig;
 use Hongyukeji\LaravelTranslate\Gateways\YouDaoGateway\YouDaoGateway;
 
 class YouDaoTranslator implements TranslatorInterface
