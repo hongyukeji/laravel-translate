@@ -10,7 +10,6 @@ namespace Hongyukeji\LaravelTranslate\Gateways\DeeplClient\Handler;
  */
 interface DeeplRequestHandlerInterface
 {
-
     const METHOD_POST = 'POST';
     const METHOD_GET = 'GET';
 

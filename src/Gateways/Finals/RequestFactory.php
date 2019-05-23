@@ -9,36 +9,32 @@
  * +----------------------------------------------------------------------
  * | Author: shadow <admin@hongyuvip.com>  QQ: 1527200768
  * +----------------------------------------------------------------------
- * | Version: v1.0.0  Date:2019-05-23 Time:13:27
+ * | Version: v1.0.0  Date:2019-05-23 Time:14:46
  * +----------------------------------------------------------------------
  */
 
-namespace Hongyukeji\LaravelTranslate\Gateways\YouDao;
+namespace Hongyukeji\LaravelTranslate\Gateways\Finals;
 
-use Hongyukeji\LaravelTranslate\Gateways\GatewayInterface;
-use Hongyukeji\LaravelTranslate\Gateways\Interfaces\ResponseModelInterface;
+use Hongyukeji\LaravelTranslate\Gateways\Interfaces\RequestFactoryInterface;
+use Hongyukeji\LaravelTranslate\Gateways\Interfaces\RequestHandlerInterface;
 use Hongyukeji\LaravelTranslate\Gateways\Interfaces\TranslationConfigInterface;
 
-class YouDaoGateway implements GatewayInterface
+final class RequestFactory implements RequestFactoryInterface
 {
+    private $authKey;
 
-    public function getUsage(): ResponseModelInterface
+    public function __construct(string $authKey)
     {
-        // TODO: Implement getUsage() method.
+        $this->authKey = $authKey;
     }
 
-    public function getTranslation(TranslationConfigInterface $translation): ResponseModelInterface
+    public function createTranslationRequestHandler(TranslationConfigInterface $translation): RequestHandlerInterface
     {
-        // TODO: Implement getTranslation() method.
+        return new TranslationRequestHandler($this->authKey, $translation);
     }
 
-    public function translate(string $text, string $target_language): ResponseModelInterface
+    public function createUsageRequestHandler(): RequestHandlerInterface
     {
-        // TODO: Implement translate() method.
-    }
-
-    public static function create(string $apiKey): GatewayInterface
-    {
-        // TODO: Implement create() method.
+        return new UsageRequestHandler($this->authKey);
     }
 }
