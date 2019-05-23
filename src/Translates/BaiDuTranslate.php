@@ -351,10 +351,6 @@ class BaiDuTranslate
 
         $queryBodyArray = [
             'q'     => $string,
-            'appid' => $this->appId,
-            'from'  => $this->source,
-            'to'    => $this->target,
-            'sign'  => $this->target,
         ];
 
         $queryBodyEncoded = preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($queryBodyArray));
