@@ -30,7 +30,9 @@ class YouDaoTranslator implements TranslatorInterface
     {
         $appId = config('translate.gateways.youdao.app_id');
         $key = config('translate.gateways.youdao.key');
-        $this->translator = YouDaoGateway::create($appId, $key);
+        if (!empty($appId) && !empty($key)) {
+            $this->translator = YouDaoGateway::create($appId, $key);
+        }
     }
 
     public function setSource(string $source)

@@ -19,7 +19,7 @@ class BaiDuTranslator implements TranslatorInterface
         $target = config('translate.target_language');
         $this->translator = new BaiDuTranslate($target[0]);
 
-        if (config('translate.gateways.baidu')) {
+        if (!empty($appId) && !empty($key)) {
             $this->translator->setAppId($appId);
             $this->translator->setKey($key);
         }
