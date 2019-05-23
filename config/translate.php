@@ -46,7 +46,7 @@ return [
     /*
      * Here you can specify the target language code(s). This can be a string or an array.
      */
-    'target_language' => ['zh'],
+    'target_language' => explode(",", env('TRANSLATE_TARGET_LANGUAGE', 'zh')),    // ['zh', 'ara', 'ja', 'ru', 'kor']
 
     /*
      * Specify the path to the translation files.

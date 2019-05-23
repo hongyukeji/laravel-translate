@@ -242,7 +242,9 @@ class BaiDuGateway
     {
         $responseArray = $this->getResponse($string);
 
-        if (empty($responseArray['trans_result'])) {
+        if (empty($responseArray['trans_result']) && isset($responseArray['error_code'])) {
+            dump($this->errorTips($responseArray['error_code']));
+        } else {
             dump($responseArray);
         }
 
@@ -352,6 +354,25 @@ class BaiDuGateway
     protected function isValidLocale(string $lang): bool
     {
         return (bool)preg_match('/^([a-z]{2})(-[A-Z]{2})?$/', $lang);
+    }
+
+    public function errorTips($error_code)
+    {
+        $status = [
+            '52000'     => '含义: 成功',
+            '52001	' => '含义: 请求超时 , 解决方法: 重试',
+            '52002'     => '含义: 系统错误 , 解决方法: 重试',
+            '52003'     => '含义: 未授权用户 , 解决方法: 检查您的 appid 是否正确，或者服务是否开通',
+            '54000'     => '含义: 必填参数为空 , 解决方法: 检查是否少传参数',
+            '54001'     => '含义: 签名错误 , 解决方法: 请检查您的签名生成方法',
+            '54003'     => '含义: 访问频率受限 , 解决方法: 请降低您的调用频率',
+            '54004'     => '含义: 账户余额不足 , 解决方法: 请前往管理控制台为账户充值',
+            '54005'     => '含义: 长query请求频繁 , 解决方法: 请降低长query的发送频率，3s后再试',
+            '58000'     => '含义: 客户端IP非法 , 解决方法: 检查个人资料里填写的 IP地址 是否正确 可前往管理控制平台修改IP限制，IP可留空',
+            '58001'     => '含义: 译文语言方向不支持 , 解决方法: 检查译文语言是否在语言列表里',
+            '58002'     => '含义: 服务当前已关闭 , 解决方法: 请前往管理控制台开启服务',
+        ];
+        return isset($status[$error_code]) ? $status[$error_code] : '未知错误';
     }
 
     function use_translate($string)
