@@ -29,11 +29,11 @@ return [
             'key' => env('GOOGLE_TRANSLATE_API_KEY')
         ],
         'baidu'  => [
-            'appid' => env('BAIDU_TRANSLATE_API_APPID'),
+            'app_id' => env('BAIDU_TRANSLATE_API_APP_ID'),
             'key'   => env('BAIDU_TRANSLATE_API_KEY')
         ],
         'youdao' => [
-            'appid' => env('YOUDAO_TRANSLATE_API_APPID'),
+            'app_id' => env('YOUDAO_TRANSLATE_API_APP_ID'),
             'key'   => env('YOUDAO_TRANSLATE_API_KEY')
         ]
     ],

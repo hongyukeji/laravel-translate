@@ -5,7 +5,7 @@ namespace Hongyukeji\LaravelTranslate\Commands;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
-use Hongyukeji\LaravelTranslate\Translate;
+use Hongyukeji\LaravelTranslate\Translates;
 
 class AllCommand extends Command
 {
