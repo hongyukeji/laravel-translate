@@ -13,7 +13,7 @@
  * +----------------------------------------------------------------------
  */
 
-namespace Hongyukeji\LaravelTranslate\Gateways\Exception;
+namespace Hongyukeji\LaravelTranslate\Gateways\Exceptions;
 
 
 class RequestException extends \Exception
