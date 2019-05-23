@@ -39,7 +39,7 @@ final class Translation extends AbstractResponseModel implements TranslationInte
 
     public function getText(): string
     {
-        return $this->text;
+        return $this->text ?? '';
     }
 
     public function setText(string $text): TranslationInterface
