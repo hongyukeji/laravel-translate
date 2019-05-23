@@ -5,7 +5,7 @@ namespace Hongyukeji\LaravelTranslate\Tokens;
 /**
  * A nice interface for providing tokens.
  */
-class SampleTokenGenerator implements TokenProviderInterface
+class BaiDuTokenGenerator implements TokenProviderInterface
 {
     /**
      * Generate a fake token just as an example.

@@ -19,7 +19,7 @@ use BadMethodCallException;
 use ErrorException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use Hongyukeji\LaravelTranslate\Tokens\GoogleTokenGenerator;
+use Hongyukeji\LaravelTranslate\Tokens\BaiDuTokenGenerator;
 use Hongyukeji\LaravelTranslate\Tokens\TokenProviderInterface;
 use UnexpectedValueException;
 
@@ -133,7 +133,7 @@ class BaiDuTranslate
     public function __construct(string $target = 'en', string $source = null, array $options = null, TokenProviderInterface $tokenProvider = null, string $appId = null, string $key = null, string $salt = null)
     {
         $this->client = new Client();
-        $this->setTokenProvider($tokenProvider ?? new GoogleTokenGenerator)
+        $this->setTokenProvider($tokenProvider ?? new BaiDuTokenGenerator)
             ->setOptions($options)// Options are already set in client constructor tho.
             ->setSource($source)
             ->setTarget($target)
@@ -247,7 +247,7 @@ class BaiDuTranslate
     public static function trans(string $string, string $target = 'en', string $source = null, array $options = [], TokenProviderInterface $tokenProvider = null, string $appId = null, string $key = null, string $salt = null)
     {
         return (new self)
-            ->setTokenProvider($tokenProvider ?? new GoogleTokenGenerator)
+            ->setTokenProvider($tokenProvider ?? new BaiDuTokenGenerator)
             ->setOptions($options)// Options are already set in client constructor tho.
             ->setSource($source)
             ->setTarget($target)
