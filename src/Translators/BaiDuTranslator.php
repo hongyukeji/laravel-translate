@@ -39,7 +39,12 @@ class BaiDuTranslator implements TranslatorInterface
     public function translate(string $string): string
     {
         try {
-            $this->translator->setSource($this->source)->setTarget($this->target)->setTarget($this->target);
+            if ($this->source) {
+                $this->translator->setSource($this->source);
+            }
+            if ($this->target) {
+                $this->translator->setTarget($this->target);
+            }
             return $this->translator->translate($string);
         } catch (\Throwable $th) {
             if ($th->getMessage() === 'Return value of Stichoza\GoogleTranslate\GoogleTranslate::translate() must be of the type string, null returned') {
