@@ -38,7 +38,8 @@ class TranslateServiceProvider extends ServiceProvider
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__ . '/../config/translate.php', 'translate');
 
-        $this->app->bind(TranslatorInterface::class, config('translate.translator'));
+        $driver = config('translate.driver');
+        $this->app->bind(TranslatorInterface::class, config("translate.translators.{$driver}"));
 
         // Register the main class to use with the facade
         $this->app->singleton('translate', function () {
