@@ -12,7 +12,7 @@
     "require": {
         "php": "^7.1",
         "guzzlehttp/guzzle": "^6.3",
-        "themsaid/laravel-langman": "^1.3"
+        "hongyukeji/laravel-langman": "^1.3"
     },
     "require-dev": {
     },
