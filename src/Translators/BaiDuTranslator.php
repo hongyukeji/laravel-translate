@@ -2,7 +2,7 @@
 
 namespace Hongyukeji\LaravelTranslate\Translators;
 
-use Hongyukeji\LaravelTranslate\Gateways\BaiDuGateway;
+use Hongyukeji\LaravelTranslate\Gateways\BaiDuGateway\BaiDuGateway;
 use Hongyukeji\LaravelTranslate\Exceptions\LanguageCodeNotExist;
 
 class BaiDuTranslator implements TranslatorInterface

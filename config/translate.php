@@ -12,7 +12,7 @@ return [
     | Supported: "google"
     |
     */
-    'driver' => env('TRANSLATE_DRIVER', 'baidu'),
+    'driver' => env('TRANSLATE_DRIVER', 'youdao'),
 
     /*
     |--------------------------------------------------------------------------
@@ -41,12 +41,12 @@ return [
     /*
      * Here you can specify the source language code.
      */
-    'source_language' => env('TRANSLATE_SOURCE_LANGUAGE', 'en'),
+    'source_language' => env('TRANSLATE_SOURCE_LANGUAGE', 'zh-CN'),
 
     /*
      * Here you can specify the target language code(s). This can be a string or an array.
      */
-    'target_language' => explode(",", env('TRANSLATE_TARGET_LANGUAGE', 'zh')),    // ['zh', 'ara', 'ja', 'ru', 'kor']
+    'target_language' => explode(",", env('TRANSLATE_TARGET_LANGUAGE', 'en')),    // ['en', 'zh-CN', 'ara', 'ja', 'ru', 'kor']
 
     /*
      * Specify the path to the translation files.
